@@ -9,12 +9,37 @@
         android:id="@+id/navigation_contacts"
         android:name="com.example.contacts.ui.contacts.ContactsFragment"
         android:label="@string/title_contacts"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_contacts">
+        <action
+            android:id="@+id/action_navigation_contacts_to_contactInformationFragment"
+            app:destination="@id/contactInformationFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_messages"
         android:name="com.example.contacts.ui.messages.MessagesFragment"
         android:label="@string/title_messages"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_messages" />
+    <fragment
+        android:id="@+id/contactInformationFragment"
+        android:name="com.example.contacts.ui.contacts.ContactInformationFragment"
+        android:label="Contact Information"
+        tools:layout="@layout/fragment_contact_information">
+        <argument
+            android:name="selectedContact"
+            app:argType="com.example.contacts.model.Contact" />
+        <action
+            android:id="@+id/action_contactInformationFragment_to_newMessageFragment"
+            app:destination="@id/newMessageFragment" />
+    </fragment>
+    <fragment
+        tools:layout="@layout/fragment_new_message"
+        android:id="@+id/newMessageFragment"
+        android:name="com.example.contacts.ui.contacts.NewMessageFragment"
+        android:label="New Message" >
+        <argument
+            android:name="phoneNumber"
+            app:argType="string" />
+    </fragment>
 
 </navigation>
