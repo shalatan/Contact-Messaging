@@ -38,8 +38,8 @@
         android:name="com.example.contacts.ui.newmessage.NewMessageFragment"
         android:label="New Message" >
         <argument
-            android:name="phoneNumber"
-            app:argType="string" />
+            android:name="selectedContact"
+            app:argType="com.example.contacts.model.Contact" />
     </fragment>
 
 </navigation>

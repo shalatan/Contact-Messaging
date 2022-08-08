@@ -26,6 +26,7 @@ android {
 
         buildConfigField("String", "TWILIO_SID", apikeyProperties['TWILIO_SID'])
         buildConfigField("String", "TWILIO_TOKEN", apikeyProperties['TWILIO_TOKEN'])
+        buildConfigField("String", "TWILIO_CONTACT_NUMBER", apikeyProperties['TWILIO_CONTACT_NUMBER'])
 
     }
 
@@ -75,7 +76,7 @@ dependencies {
     implementation "androidx.activity:activity-ktx:$activity_version"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
 
-    //Hilt
+    // Hilt
     implementation 'com.google.dagger:hilt-android:2.43.2'
     kapt 'com.google.dagger:hilt-compiler:2.43.2'
     kapt 'androidx.hilt:hilt-compiler:1.0.0'
@@ -85,10 +86,10 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
 
+    // Network Libraries
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
     implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2'
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
-    implementation 'com.squareup.moshi:moshi:1.11.0'
     implementation 'com.squareup.moshi:moshi-kotlin:1.11.0'
 }

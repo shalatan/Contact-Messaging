@@ -4,9 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.example.contacts.databinding.FragmentMessagesBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -14,27 +13,26 @@ import dagger.hilt.android.AndroidEntryPoint
 class MessagesFragment : Fragment() {
 
     private var _binding: FragmentMessagesBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
+
+    private val viewModel: MessagesViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val messagesViewModel =
-            ViewModelProvider(this).get(MessagesViewModel::class.java)
+        _binding = FragmentMessagesBinding.inflate(inflater)
 
-        _binding = FragmentMessagesBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        val adapter = MessageAdapter()
+        val recyclerView = binding.messagesRecyclerView
+        recyclerView.adapter = adapter
 
-        val textView: TextView = binding.textDashboard
-        messagesViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+        viewModel.messages.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
         }
-        return root
+
+        return binding.root
     }
 
     override fun onDestroyView() {

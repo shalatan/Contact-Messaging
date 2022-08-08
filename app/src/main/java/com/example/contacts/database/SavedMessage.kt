@@ -5,7 +5,9 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "saved_messages_table")
 data class SavedMessage(
-    @PrimaryKey
-    var Id: Int = -1,
-    var movieTitle: String?,
+    @PrimaryKey(autoGenerate = true)
+    var message_id: Int = 0,
+    var message_otp: String,
+    var message_receiver: String,
+    var message_date: String
 )

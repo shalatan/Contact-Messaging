@@ -42,7 +42,7 @@ class ContactInformationFragment : Fragment() {
         binding.sendMessageButton.setOnClickListener {
             findNavController().navigate(
                 ContactInformationFragmentDirections.actionContactInformationFragmentToNewMessageFragment(
-                    selectedContact.contactNumber
+                    selectedContact
                 )
             )
         }

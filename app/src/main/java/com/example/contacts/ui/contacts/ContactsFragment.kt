@@ -20,8 +20,8 @@ class ContactsFragment : Fragment() {
     val viewModel: ContactsViewModel by viewModels()
 
     private val contacts: List<Contact> = listOf(
-        Contact("Shasahnk", "Singh", "7599185055"),
-        Contact("Avishank", "Singh", "759293688")
+        Contact("Shasahnk", "Singh", "+917599185055"),
+        Contact("Avishank", "Singh", "+917599293688")
     )
 
     override fun onCreateView(
