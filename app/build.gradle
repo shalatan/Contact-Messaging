@@ -8,6 +8,10 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
 }
 
+def apikeyPropertiesFile = rootProject.file("apikey.properties")
+def apikeyProperties = new Properties()
+apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
+
 android {
     compileSdk 32
 
@@ -19,6 +23,10 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "TWILIO_SID", apikeyProperties['TWILIO_SID'])
+        buildConfigField("String", "TWILIO_TOKEN", apikeyProperties['TWILIO_TOKEN'])
+
     }
 
     buildTypes {
@@ -46,6 +54,7 @@ dependencies {
     def lifecycle_version = "2.5.0"
     def activity_version = "1.5.1"
     def fragment_version = "1.5.1"
+    def retrofit_version = "2.9.0"
 
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'
@@ -75,4 +84,13 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_version"
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
+    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2'
+    implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
+    implementation 'com.squareup.moshi:moshi:1.11.0'
+    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation 'com.squareup.moshi:moshi-kotlin:1.11.0'
+//    implementation group: 'com.twilio.sdk',name:'twilio',version:'9.0.0-rc.2'
 }

@@ -1,14 +1,18 @@
 package com.example.contacts.ui.contacts
 
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.contacts.databinding.FragmentContactInformationBinding
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.contacts.databinding.FragmentNewMessageBinding
+import com.example.contacts.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class NewMessageFragment : Fragment() {
@@ -17,6 +21,8 @@ class NewMessageFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var contactNumber: String
+
+    val viewModel: NewMessageViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +38,27 @@ class NewMessageFragment : Fragment() {
     ): View {
         _binding = FragmentNewMessageBinding.inflate(inflater)
 
+        binding.send.setOnClickListener {
+            val body = "Hello test"
+            val from = "+13304463624"
+            val to = "+917599185055"
+
+            val base64EncodedCredentials = "Basic " + Base64.encodeToString(
+                (Constants.TWILIO_SID + ":" + Constants.TWILIO_TOKEN).toByteArray(), Base64.NO_WRAP
+            )
+
+            val data: MutableMap<String, String> = HashMap()
+            data["From"] = from
+            data["To"] = to
+            data["Body"] = body
+
+            lifecycleScope.launch {
+                viewModel.send(
+                    sig = base64EncodedCredentials,
+                    data = data
+                )
+            }
+        }
         return binding.root
     }
 
