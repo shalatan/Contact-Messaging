@@ -1,9 +1,10 @@
-package com.example.contacts.ui.contacts
+package com.example.contacts.ui.newmessage
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.contacts.database.DatabaseRepository
 import com.example.contacts.model.MessageResponse
 import com.example.contacts.network.NetworkRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,7 +12,10 @@ import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 @HiltViewModel
-class NewMessageViewModel @Inject constructor(private val repository: NetworkRepository) :
+class NewMessageViewModel @Inject constructor(
+    private val networkRepository: NetworkRepository,
+    private val databaseRepository: DatabaseRepository
+) :
     ViewModel() {
 
     private val _messageResponse = MutableLiveData<MessageResponse>()
@@ -19,15 +23,14 @@ class NewMessageViewModel @Inject constructor(private val repository: NetworkRep
         get() = _messageResponse
 
     suspend fun send(sig: String, data: Map<String, String>) {
-        val responseDeferred = repository.sendMessage(sig, data)
+        val responseDeferred = networkRepository.sendMessageAsync(sig, data)
         try {
             _messageResponse.value = responseDeferred.await()
-            Log.e("ABCD S", _messageResponse.value.toString())
+            Log.e("ABCD R", _messageResponse.value.toString())
         } catch (exception: SocketTimeoutException) {
-            Log.e("ABCD E1", exception.toString())
+            Log.e("ABCD E", exception.toString())
         } catch (t: Throwable) {
-            Log.e("ABCD E2", t.message.toString())
+            Log.e("ABCD T", t.toString())
         }
     }
-
 }

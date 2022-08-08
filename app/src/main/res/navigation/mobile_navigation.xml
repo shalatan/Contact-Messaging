@@ -35,7 +35,7 @@
     <fragment
         tools:layout="@layout/fragment_new_message"
         android:id="@+id/newMessageFragment"
-        android:name="com.example.contacts.ui.contacts.NewMessageFragment"
+        android:name="com.example.contacts.ui.newmessage.NewMessageFragment"
         android:label="New Message" >
         <argument
             android:name="phoneNumber"

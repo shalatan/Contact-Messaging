@@ -1,4 +1,4 @@
-package com.example.contacts.ui.contacts
+package com.example.contacts.ui.newmessage
 
 import android.os.Bundle
 import android.util.Base64
@@ -57,6 +57,10 @@ class NewMessageFragment : Fragment() {
                     sig = base64EncodedCredentials,
                     data = data
                 )
+            }
+
+            viewModel.messageResponse.observe(viewLifecycleOwner) {
+                Log.e("ABCD F", it.toString())
             }
         }
         return binding.root

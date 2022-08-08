@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class NetworkRepository @Inject constructor(private val retrofitService: RetrofitService) {
 
-    fun sendMessage(signature: String, data: Map<String, String>): Deferred<MessageResponse> {
+    fun sendMessageAsync(signature: String, data: Map<String, String>): Deferred<MessageResponse> {
         return retrofitService.sendMessage(
             accountSid = Constants.TWILIO_SID,
             signature = signature,

@@ -7,7 +7,7 @@ import retrofit2.http.*
 interface RetrofitService {
 
     @FormUrlEncoded
-    @POST("Accounts/{ACCOUNT_SID}/SMS/Messages")
+    @POST("Accounts/{ACCOUNT_SID}/SMS/Messages.json")
     fun sendMessage(
         @Path("ACCOUNT_SID") accountSid: String,
         @Header("Authorization") signature: String,
