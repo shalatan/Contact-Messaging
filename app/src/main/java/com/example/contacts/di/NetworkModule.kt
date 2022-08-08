@@ -27,14 +27,6 @@ object NetworkModule {
         }.build()
     }
 
-//    @Provides
-//    @Singleton
-//    fun provideGson():Gson{
-//        return GsonBuilder()
-//            .setLenient()
-//            .create()
-//    }
-
     @Provides
     @Singleton
     fun provideHttpClient(): OkHttpClient {

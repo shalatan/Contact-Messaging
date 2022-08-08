@@ -19,8 +19,9 @@ class ContactsFragment : Fragment() {
 
     val viewModel: ContactsViewModel by viewModels()
 
+    //fake contacts data
     private val contacts: List<Contact> = listOf(
-        Contact("Shasahnk", "Singh", "+917599185055"),
+        Contact("Shashank", "Singh", "+917599185055"),
         Contact("Avishank", "Singh", "+917599293688")
     )
 
@@ -43,10 +44,6 @@ class ContactsFragment : Fragment() {
         recyclerView.adapter = contactAdapter
         contactAdapter.submitList(contacts)
 
-//        val textView: TextView = binding.textHome
-//        homeViewModel.text.observe(viewLifecycleOwner) {
-//            textView.text = it
-//        }
         return binding.root
     }
 

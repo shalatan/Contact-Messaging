@@ -29,11 +29,10 @@ class NewMessageViewModel @Inject constructor(
         val responseDeferred = networkRepository.sendMessageAsync(sig, data)
         try {
             _messageResponse.value = responseDeferred.await()
-            Log.e("ABCD R", _messageResponse.value.toString())
         } catch (exception: SocketTimeoutException) {
-            Log.e("ABCD E", exception.toString())
+            Log.e("Error Getting Response", exception.toString())
         } catch (t: Throwable) {
-            Log.e("ABCD T", t.toString())
+            Log.e("Error Getting Response", t.toString())
         }
     }
 

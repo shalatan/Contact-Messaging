@@ -3,6 +3,9 @@ package com.example.contacts.database
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+/**
+ * data class to save messages in room db
+ */
 @Entity(tableName = "saved_messages_table")
 data class SavedMessage(
     @PrimaryKey(autoGenerate = true)

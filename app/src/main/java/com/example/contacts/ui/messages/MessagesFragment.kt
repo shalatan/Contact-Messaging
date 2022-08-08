@@ -1,11 +1,16 @@
 package com.example.contacts.ui.messages
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.contacts.R
 import com.example.contacts.databinding.FragmentMessagesBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,12 +29,22 @@ class MessagesFragment : Fragment() {
     ): View {
         _binding = FragmentMessagesBinding.inflate(inflater)
 
-        val adapter = MessageAdapter()
+        //divider for recyclerView
+        val decoration =
+            DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
+        ContextCompat.getDrawable(requireContext(), R.drawable.recycler_view_divider)?.let {
+            decoration.setDrawable(it)
+        }
+
+        val messageAdapter = MessageAdapter()
         val recyclerView = binding.messagesRecyclerView
-        recyclerView.adapter = adapter
+        recyclerView.apply {
+            adapter = messageAdapter
+            addItemDecoration(decoration)
+        }
 
         viewModel.messages.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
+            messageAdapter.submitList(it)
         }
 
         return binding.root

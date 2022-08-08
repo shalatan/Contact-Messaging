@@ -1,8 +1,10 @@
 package com.example.contacts.ui.newmessage
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
 import android.util.Base64
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,37 +60,45 @@ class NewMessageFragment : Fragment() {
         }
 
         binding.send.setOnClickListener {
-            finalMessage = messageTextField.editText?.text.toString()
-            val from = Constants.TWILIO_CONTACT_NUMBER
-            val to = selectedContact.contactNumber
+            if (hasNetwork(requireActivity()) == true) {
+                //device has active internet connection
+                sendButton.isEnabled = false
+                finalMessage = messageTextField.editText?.text.toString()
+                val from = Constants.TWILIO_CONTACT_NUMBER
+                val to = selectedContact.contactNumber
 
-            val base64EncodedCredentials = "Basic " + Base64.encodeToString(
-                (Constants.TWILIO_SID + ":" + Constants.TWILIO_TOKEN).toByteArray(), Base64.NO_WRAP
-            )
-
-            val data: MutableMap<String, String> = HashMap()
-            data["From"] = from
-            data["To"] = to
-            data["Body"] = finalMessage
-
-            Log.e("ABCD MAP : ", data.toString())
-
-            lifecycleScope.launch {
-                viewModel.send(
-                    sig = base64EncodedCredentials,
-                    data = data
+                val base64EncodedCredentials = "Basic " + Base64.encodeToString(
+                    (Constants.TWILIO_SID + ":" + Constants.TWILIO_TOKEN).toByteArray(),
+                    Base64.NO_WRAP
                 )
+
+                val data: MutableMap<String, String> = HashMap()
+                data["From"] = from
+                data["To"] = to
+                data["Body"] = finalMessage
+
+                lifecycleScope.launch {
+                    viewModel.send(
+                        sig = base64EncodedCredentials,
+                        data = data
+                    )
+                }
+            } else {
+                //device is not connected to internet
+                Toast.makeText(context, "No Internet Connection", Toast.LENGTH_SHORT).show()
             }
         }
 
         viewModel.messageResponse.observe(viewLifecycleOwner) {
             if (it.status == "queued") {
+                Toast.makeText(context, "Message Sent Successfully", Toast.LENGTH_SHORT).show()
                 val savedMessage = SavedMessage(
                     message_receiver = "${selectedContact.firstName} ${selectedContact.lastName}",
                     message_otp = otp.toString(),
                     message_date = it.date_created
                 )
                 viewModel.insertMessageToDatabase(savedMessage)
+                sendButton.isEnabled = true
             } else {
                 Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT).show()
             }
@@ -100,5 +110,18 @@ class NewMessageFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    /**
+     * check if device has active network connection
+     */
+    private fun hasNetwork(context: Context): Boolean? {
+        var isConnected: Boolean? = false // Initial Value
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
+        if (activeNetwork != null && activeNetwork.isConnected)
+            isConnected = true
+        return isConnected
     }
 }

@@ -32,7 +32,13 @@ class MessageAdapter() :
         parent: ViewGroup,
         viewType: Int
     ): MessageViewHolder {
-        return MessageViewHolder(ItemMessageBinding.inflate(LayoutInflater.from(parent.context)))
+        return MessageViewHolder(
+            ItemMessageBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {

@@ -23,7 +23,6 @@ class ContactInformationFragment : Fragment() {
         super.onCreate(savedInstanceState)
         selectedContact =
             ContactInformationFragmentArgs.fromBundle(requireArguments()).selectedContact
-        Log.e("ABCD", "$selectedContact")
     }
 
     override fun onCreateView(

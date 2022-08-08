@@ -32,7 +32,13 @@ class ContactAdapter(private val onClickListener: OnClickListener) :
         parent: ViewGroup,
         viewType: Int
     ): ContactViewHolder {
-        return ContactViewHolder(ItemContactBinding.inflate(LayoutInflater.from(parent.context)))
+        return ContactViewHolder(
+            ItemContactBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
