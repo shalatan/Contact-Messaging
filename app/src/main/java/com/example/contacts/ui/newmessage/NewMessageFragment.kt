@@ -5,10 +5,12 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Bundle
 import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -28,7 +30,8 @@ class NewMessageFragment : Fragment() {
     private var _binding: FragmentNewMessageBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var messageTextField: TextInputLayout
+    private lateinit var messageEditText: TextInputLayout
+    private lateinit var messageTextView: TextView
     private lateinit var sendButton: Button
     private lateinit var selectedContact: Contact
     private lateinit var initialMessage: String
@@ -49,67 +52,79 @@ class NewMessageFragment : Fragment() {
     ): View {
         _binding = FragmentNewMessageBinding.inflate(inflater)
 
-        otp = (100000..999999).random()
-        initialMessage = "Hey, Your OTP is : $otp"
-
         sendButton = binding.send
-        messageTextField = binding.messageTextField
-        messageTextField.editText?.setText(initialMessage)
-        messageTextField.editText?.doOnTextChanged { text, _, _, _ ->
+        messageTextView = binding.messageTextView
+        messageEditText = binding.messageEditText
+
+        otp = (100000..999999).random()
+        initialMessage = "Hey, Your OTP is : $otp\n"
+        messageTextView.text = initialMessage
+
+        messageEditText.editText?.doOnTextChanged { text, _, _, _ ->
             sendButton.isEnabled = !text.isNullOrEmpty()
+            val messageText = "$initialMessage $text"
+            messageTextView.text = messageText
         }
 
         binding.send.setOnClickListener {
-            if (hasNetwork(requireActivity()) == true) {
-                //device has active internet connection
-                sendButton.isEnabled = false
-                finalMessage = messageTextField.editText?.text.toString()
-                val from = Constants.TWILIO_CONTACT_NUMBER
-                val to = selectedContact.contactNumber
-
-                val base64EncodedCredentials = "Basic " + Base64.encodeToString(
-                    (Constants.TWILIO_SID + ":" + Constants.TWILIO_TOKEN).toByteArray(),
-                    Base64.NO_WRAP
-                )
-
-                val data: MutableMap<String, String> = HashMap()
-                data["From"] = from
-                data["To"] = to
-                data["Body"] = finalMessage
-
-                lifecycleScope.launch {
-                    viewModel.send(
-                        sig = base64EncodedCredentials,
-                        data = data
-                    )
-                }
-            } else {
-                //device is not connected to internet
-                Toast.makeText(context, "No Internet Connection", Toast.LENGTH_SHORT).show()
-            }
+            sendMessage()
         }
 
         viewModel.messageResponse.observe(viewLifecycleOwner) {
-            if (it.status == "queued") {
+            if (it?.status == "queued") {
                 Toast.makeText(context, "Message Sent Successfully", Toast.LENGTH_SHORT).show()
                 val savedMessage = SavedMessage(
                     message_receiver = "${selectedContact.firstName} ${selectedContact.lastName}",
                     message_otp = otp.toString(),
                     message_date = it.date_created
                 )
+                Log.e("ABED", savedMessage.toString())
                 viewModel.insertMessageToDatabase(savedMessage)
                 sendButton.isEnabled = true
-            } else {
+                viewModel.clearResponse()
+            } else if (it?.message != null) {
                 Toast.makeText(requireContext(), it.message.toString(), Toast.LENGTH_SHORT).show()
             }
         }
-
         return binding.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    /**
+     * send the text as message to selectedContact
+     */
+    private fun sendMessage() {
+        if (hasNetwork(requireActivity()) == true) {
+            //device has active internet connection
+            sendButton.isEnabled = false
+            finalMessage = messageTextView.text.toString()
+            val from = Constants.TWILIO_CONTACT_NUMBER
+            val to = selectedContact.contactNumber
+
+            val base64EncodedCredentials = "Basic " + Base64.encodeToString(
+                (Constants.TWILIO_SID + ":" + Constants.TWILIO_TOKEN).toByteArray(),
+                Base64.NO_WRAP
+            )
+
+            val data: MutableMap<String, String> = HashMap()
+            data["From"] = from
+            data["To"] = to
+            data["Body"] = finalMessage
+
+            lifecycleScope.launch {
+                viewModel.send(
+                    sig = base64EncodedCredentials,
+                    data = data
+                )
+            }
+        } else {
+            //device is not connected to internet
+            Toast.makeText(context, "No Internet Connection", Toast.LENGTH_SHORT).show()
+        }
     }
 
     /**

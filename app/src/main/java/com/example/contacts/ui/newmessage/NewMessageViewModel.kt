@@ -21,19 +21,24 @@ class NewMessageViewModel @Inject constructor(
 ) :
     ViewModel() {
 
-    private val _messageResponse = MutableLiveData<MessageResponse>()
-    val messageResponse: LiveData<MessageResponse>
+    private val _messageResponse = MutableLiveData<MessageResponse?>()
+    val messageResponse: LiveData<MessageResponse?>
         get() = _messageResponse
 
     suspend fun send(sig: String, data: Map<String, String>) {
         val responseDeferred = networkRepository.sendMessageAsync(sig, data)
         try {
             _messageResponse.value = responseDeferred.await()
+            Log.e("Response", _messageResponse.value.toString())
         } catch (exception: SocketTimeoutException) {
             Log.e("Error Getting Response", exception.toString())
         } catch (t: Throwable) {
             Log.e("Error Getting Response", t.toString())
         }
+    }
+
+    fun clearResponse() {
+        _messageResponse.value = null
     }
 
     fun insertMessageToDatabase(savedMessage: SavedMessage) {

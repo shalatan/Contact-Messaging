@@ -8,7 +8,7 @@
         <entry key="..\:/Android/Contacts/app/src/main/res/layout/fragment_contact_information.xml" value="0.25" />
         <entry key="..\:/Android/Contacts/app/src/main/res/layout/fragment_home.xml" value="0.25" />
         <entry key="..\:/Android/Contacts/app/src/main/res/layout/fragment_messages.xml" value="0.25" />
-        <entry key="..\:/Android/Contacts/app/src/main/res/layout/fragment_new_message.xml" value="0.25" />
+        <entry key="..\:/Android/Contacts/app/src/main/res/layout/fragment_new_message.xml" value="0.1" />
         <entry key="..\:/Android/Contacts/app/src/main/res/layout/item_contact.xml" value="0.25" />
         <entry key="..\:/Android/Contacts/app/src/main/res/layout/item_message.xml" value="0.25" />
         <entry key="..\:/Android/Contacts/app/src/main/res/layout/recycler_view_divider.xml" value="0.25" />
@@ -21,5 +21,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.1" />
+      </ProjectState>
+    </option>
   </component>
 </project>

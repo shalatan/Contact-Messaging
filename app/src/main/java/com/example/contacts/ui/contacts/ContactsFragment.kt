@@ -22,7 +22,12 @@ class ContactsFragment : Fragment() {
     //fake contacts data
     private val contacts: List<Contact> = listOf(
         Contact("Shashank", "Singh", "+917599185055"),
-        Contact("Avishank", "Singh", "+917599293688")
+        Contact("Kisan", "Network", "+919810153260"),
+        Contact("Dummmy 1", "Invalid Number", "+91123456789"),
+        Contact("Dummmy 2", "Invalid Number", "+91123456789"),
+        Contact("Dummmy 3", "Invalid Number", "+91123456789"),
+        Contact("Dummmy 4", "Invalid Number", "+91123456789"),
+        Contact("Dummmy 5", "Invalid Number", "+91123456789")
     )
 
     override fun onCreateView(
