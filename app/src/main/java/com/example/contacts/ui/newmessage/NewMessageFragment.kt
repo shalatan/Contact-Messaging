@@ -56,6 +56,11 @@ class NewMessageFragment : Fragment() {
         messageTextView = binding.messageTextView
         messageEditText = binding.messageEditText
 
+//        val composeView = binding.composeView
+//        composeView.setContent {
+//            RenderComposeView()
+//        }
+
         otp = (100000..999999).random()
         initialMessage = "Hey, Your OTP is : $otp\n"
         messageTextView.text = initialMessage
@@ -88,6 +93,12 @@ class NewMessageFragment : Fragment() {
         }
         return binding.root
     }
+
+//    @Composable
+//    private fun RenderComposeView() {
+
+//        Text(text = "Hey, Your OTP is : $otp")
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

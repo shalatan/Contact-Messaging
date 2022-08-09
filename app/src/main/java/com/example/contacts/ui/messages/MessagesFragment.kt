@@ -1,7 +1,6 @@
 package com.example.contacts.ui.messages
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,7 +43,14 @@ class MessagesFragment : Fragment() {
         }
 
         viewModel.messages.observe(viewLifecycleOwner) {
-            messageAdapter.submitList(it)
+            if (it.isNullOrEmpty()) {
+                recyclerView.visibility = View.GONE
+                binding.emptyTextView.visibility = View.VISIBLE
+            }else{
+                recyclerView.visibility = View.VISIBLE
+                binding.emptyTextView.visibility = View.GONE
+                messageAdapter.submitList(it)
+            }
         }
 
         return binding.root

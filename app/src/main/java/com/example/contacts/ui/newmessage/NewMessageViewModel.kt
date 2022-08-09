@@ -5,10 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.contacts.database.DatabaseRepository
+import com.example.contacts.Repository
 import com.example.contacts.database.SavedMessage
 import com.example.contacts.model.MessageResponse
-import com.example.contacts.network.NetworkRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.net.SocketTimeoutException
@@ -16,8 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewMessageViewModel @Inject constructor(
-    private val networkRepository: NetworkRepository,
-    private val databaseRepository: DatabaseRepository
+    private val repository: Repository
 ) :
     ViewModel() {
 
@@ -26,7 +24,7 @@ class NewMessageViewModel @Inject constructor(
         get() = _messageResponse
 
     suspend fun send(sig: String, data: Map<String, String>) {
-        val responseDeferred = networkRepository.sendMessageAsync(sig, data)
+        val responseDeferred = repository.sendMessageAsync(sig, data)
         try {
             _messageResponse.value = responseDeferred.await()
             Log.e("Response", _messageResponse.value.toString())
@@ -43,7 +41,7 @@ class NewMessageViewModel @Inject constructor(
 
     fun insertMessageToDatabase(savedMessage: SavedMessage) {
         viewModelScope.launch {
-            databaseRepository.insertMessage(savedMessage)
+            repository.insertMessage(savedMessage)
         }
     }
 }

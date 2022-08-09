@@ -5,14 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/empty_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="No Messages to Display"
+        android:textSize="@dimen/high_emphasis_text"
+        android:visibility="visible" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/messages_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="8dp"
         android:orientation="vertical"
         android:paddingBottom="?attr/actionBarSize"
-        android:layout_margin="8dp"
-        tools:itemCount="25"
+        android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:itemCount="25"
         tools:listitem="@layout/item_message" />
 </androidx.constraintlayout.widget.ConstraintLayout>
